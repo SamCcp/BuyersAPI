@@ -54,15 +54,6 @@ namespace Core.Features.Products.Queries
         var data = await _repo.GetAllProducts();
         var response = data.AsQueryable().ProjectTo<GetAllProductsResponse>(_mapper.ConfigurationProvider).ToList();
         return response;
-
-        //var data = new List<ProductEntity> {
-        //  new ProductEntity { ProductId = 1, ProductName = "Tomate" },
-        //  new ProductEntity { ProductId = 2, ProductName = "Fresa" }
-        //}.AsQueryable();
-
-        //var response = data.ProjectTo<GetAllProductsResponse>(_mapper.ConfigurationProvider).ToList();
-
-        //return await Task.FromResult(response);
       }
     }
     #endregion

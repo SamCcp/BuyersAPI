@@ -9,11 +9,7 @@ using System.Text.Json;
 namespace Test.Integration
 {
   public class GetProductsTests : BuyersIntegrationTest
-  {
-    public GetProductsTests():base("eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoic2FtIiwianRpIjoiNTQzNjQ3NTYtZjY0OS00N2QzLWFjYWMtMTNkNjdlODIzNjZlIiwibmJmIjoxNjU1MzExNDkxLCJleHAiOjE2NTUzMzMwOTEsImlhdCI6MTY1NTMxMTQ5MSwiaXNzIjoiYXp6dWxlLmNvbSIsImF1ZCI6ImF6enVsZS5jb20ifQ.yXeWsyXkkfZYhIiq39cBtGOoBmMKYM6sRHrCY12jsXqOYVJNRINlnHmyRC-ZlezymhVIUTrNMQ_DujlzOnYbNQ")
-    {
-     
-    }
+  { 
     [Fact]
     public async Task GetAll_Products_ReturnsList()
     {

@@ -2,6 +2,11 @@
 {
   public static class ApiRoutes
   {
+
+    public static class Login
+    {
+      public const string LoginMethod = "login";
+    }
     public static class Products
     {
       public const string GetAll = "products";
