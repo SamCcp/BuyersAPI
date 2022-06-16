@@ -6,6 +6,7 @@
     public static class Login
     {
       public const string LoginMethod = "login";
+      public const string TokenValidate = "login/validate/{token}";
     }
     public static class Products
     {

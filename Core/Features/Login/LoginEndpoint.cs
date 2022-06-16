@@ -2,6 +2,7 @@
 using Core.Security;
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
@@ -18,21 +19,25 @@ namespace Core.Features.Login
 
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-      app.MapPost("login", (JwtConfiguration jwtConfig, LoginModel login) =>
+      app.MapPost(ApiRoutes.Login.LoginMethod, (JwtConfiguration jwtConfig, LoginModel login) =>
       {
         var tokenManager = new TokenManager(jwtConfig);
         tokenManager.AddClaim("user", login.UserName);
         var token = tokenManager.CreateToken();
         return token;
-      }).AllowAnonymous();
+      })
+      .Produces(200)
+      .Produces(200, typeof(string))
+      .WithTags(new string[] { "Login" });
 
-      app.MapPost("login/validate/{token}", (JwtConfiguration jwtConfig, string token) => {
+      app.MapPost(ApiRoutes.Login.TokenValidate, (JwtConfiguration jwtConfig, string token) => {
         var tokenManager = new TokenManager(jwtConfig);
         var isValid = tokenManager.IsValid(token);
         var tokenData = tokenManager.GetToken();
-        var samData = tokenData.Claims.First(c => c.Type == "sam").Value;
+        var samData = tokenData.Claims.First(c => c.Type == "user").Value;
         return isValid;
-      }).AllowAnonymous();
+      })
+      .WithTags(new string[] {"Login" });
     }
   }
 }
