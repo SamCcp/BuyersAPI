@@ -1,6 +1,8 @@
 ﻿using Core.Domain.Entities;
 using Core.Domain.Exceptions;
+using Core.Features.Products.Events;
 using Core.Interfaces;
+using Core.Security;
 
 using FluentValidation;
 
@@ -22,10 +24,12 @@ namespace Core.Features.Products.Commands
       app.MapPost(ApiRoutes.Products.AddProduct, CreateProduct)
         .WithTags("Products");
     }
+    [TokenCheck(new BuyersRoles[] { BuyersRoles.User })]
     internal async Task<IResult> CreateProduct(
       HttpContext context,
       IMediator mediator,
-      AddNewProductCommand product)
+      AddNewProductCommand product
+    )
     {
       var data = await mediator.Send(product);
       return Results.Ok(data);
@@ -45,16 +49,19 @@ namespace Core.Features.Products.Commands
       private readonly IProductRepository<ProductEntity> _repo;
       private readonly IValidator<AddNewProductCommand> _validator;
       private readonly ILogger<AddNewProductCommand> _logger;
+      private readonly IMediator _mediator;
 
       public AddNewProductCommandHandler(
         IProductRepository<ProductEntity> repo,
         IValidator<AddNewProductCommand> validator,
-        ILogger<AddNewProductCommand> logger
+        ILogger<AddNewProductCommand> logger,
+        IMediator mediator
       )
       {
         _repo = repo;
         _validator = validator;
         _logger = logger;
+        _mediator = mediator;
       }
       public async Task<ProductEntity> Handle(AddNewProductCommand request, CancellationToken cancellationToken)
       {
@@ -68,6 +75,8 @@ namespace Core.Features.Products.Commands
             throw new InvalidProductException("Pelas, el producto no se puede agregar");
           }
           data = await _repo.CreateProduct(new ProductEntity { ProductId = request.ProductId, ProductName = request.ProductName });
+
+          await _mediator.Publish(new ProductCreatedEvent { Product = data });
 
           //return data;
         }

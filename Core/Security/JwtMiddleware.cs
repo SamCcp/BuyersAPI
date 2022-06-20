@@ -38,6 +38,18 @@ namespace Core.Security
       }
 
       var tokenData = ValidateToken(token, out bool isValid);
+      //TokenInformation.UserName = tokenData.Claims.FirstOrDefault(c => c.Type == "user").Value;
+      //try
+      //{
+      //  int.TryParse(tokenData.Claims.FirstOrDefault(c => c.Type == "customerid").Value, out int cid);
+      //  int.TryParse(tokenData.Claims.FirstOrDefault(c => c.Type == "customercontactid").Value, out int ccid);
+      //  TokenInformation.CustomerId = cid;
+      //  TokenInformation.CustomerContactId = ccid;
+      //}
+      //catch (Exception ex) {
+      //  Console.WriteLine(ex.Message);
+      //}
+
 
       context.Items["TokenData"] = tokenData.Claims;
       if (shouldValidate && tokenData == null)
